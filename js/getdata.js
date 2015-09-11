@@ -135,7 +135,7 @@ Chart.defaults.global = {
 $(document).ready(function(){
 	
 
-	$.getJSON("data/booli.json", function(booli_json){
+	$.getJSON("data/booli_Karlstad.json", function(booli_json){
 		
 		console.log(booli_json);
 		
@@ -158,51 +158,57 @@ $(document).ready(function(){
 
 function jsonToLineChart(booli_json){
 	
-	var soldObjects = booli_json.sold;
-	var soldDates = [];
+	var parameters = booli_json.searchParameters; 
 	
+	if(parameters.status == "sold"){ 
 	
-	$.each(soldObjects, function(index, soldObject){
+		var soldObjects = booli_json.housingObjects;
+		var soldDates = [];
+		var soldPrices = [];
 		
-		var soldDate = soldObject[soldDate];
 		
-		console.log(soldObject.soldDate);
+		$.each(soldObjects, function(index, soldObject){
+			
+			var soldDate = soldObject[soldDate];
+			var soldPrice = soldObject[soldPrice];
+			
+			console.log(soldDate);
+			
+			soldDates.push(soldDate);
+		});
+	
 		
-		soldDates.push(soldObject.soldDate);
-	});
-
+		console.log(soldDates);
 	
-	console.log(soldDates);
-
-	
-	
-	var data = {
-	    labels: ["January", "February", "March", "April", "May", "June", "July"],
-	    datasets: [
-	        {
-	            label: "My First dataset",
-	            fillColor: "rgba(220,220,220,0.2)",
-	            strokeColor: "rgba(220,220,220,1)",
-	            pointColor: "rgba(220,220,220,1)",
-	            pointStrokeColor: "#fff",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "rgba(220,220,220,1)",
-	            data: [65, 59, 80, 81, 56, 55, 40]
-	        },
-	        {
-	            label: "My Second dataset",
-	            fillColor: "rgba(151,187,205,0.2)",
-	            strokeColor: "rgba(151,187,205,1)",
-	            pointColor: "rgba(151,187,205,1)",
-	            pointStrokeColor: "#fff",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "rgba(151,187,205,1)",
-	            data: [28, 48, 40, 19, 86, 27, 90]
-	        }
-	    ]
-	};	
-	return data;	
 		
+		
+		var data = {
+		    labels: ["January", "February", "March", "April", "May", "June", "July"],
+		    datasets: [
+		        {
+		            label: "My First dataset",
+		            fillColor: "rgba(220,220,220,0.2)",
+		            strokeColor: "rgba(220,220,220,1)",
+		            pointColor: "rgba(220,220,220,1)",
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "rgba(220,220,220,1)",
+		            data: [65, 59, 80, 81, 56, 55, 40]
+		        },
+		        {
+		            label: "My Second dataset",
+		            fillColor: "rgba(151,187,205,0.2)",
+		            strokeColor: "rgba(151,187,205,1)",
+		            pointColor: "rgba(151,187,205,1)",
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "rgba(151,187,205,1)",
+		            data: [28, 48, 40, 19, 86, 27, 90]
+		        }
+		    ]
+		};	
+		return data;	
+	}
 		
 };
 

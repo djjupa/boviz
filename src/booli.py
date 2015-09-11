@@ -18,22 +18,31 @@ print "Data directory: " + data_dir;
 
 ## Setting up initial variables
 
-#Get the path and name of the file where the output data will be stored 
-filename = data_dir + "/booli.json";
-#filename = "/Users/djjupa/Projects/git/Booli/data/booli.json"
 
 
-total_objects = 1;
 offset_ini = 0;
-limit_ini = 250;
+limit_ini = 750;
 sleeping_time = 10;
 status_Sold = "sold";
 status_ForSale = "listings";
-search_Query = "Karlstad"
+query_text = "Karlstad"
+
+
+#Get the path and name of the file where the output data will be stored 
+filename = data_dir + "/booli_" + query_text + ".json";
+#filename = "/Users/djjupa/Projects/git/Booli/data/booli.json"
+
+# Global variables
+sold_all = [];
+housingObjects = [];
+total_objects = 1;
+search_parameters = {};
 
 
 
-def callBooli(status_Sold, search_Query, offset, limit):
+
+# 
+def callBooli(status, query_text, offset, limit):
 
     # Setup the stuff
     callerId = "DataAfterLife"
@@ -42,38 +51,52 @@ def callBooli(status_Sold, search_Query, offset, limit):
     hashstr = sha1(callerId+timestamp+"XQc9CrWSJInMEnGjLnXE85aheCS8DqsFv2N5HXMi"+unique).hexdigest()
     
     
-    # The request string
-    
-    url = "/"+status_Sold+"?q="+search_Query+"&callerId="+callerId+"&time="+timestamp+"&unique="+unique+"&hash="+hashstr+"&offset="+str(offset)+"&limit="+str(limit)
+    # The request string    
+    url = "/"+status+"?q="+query_text+"&callerId="+callerId+"&time="+timestamp+"&unique="+unique+"&hash="+hashstr+"&offset="+str(offset)+"&limit="+str(limit)
     # Setup and open the connection
     connection = httplib.HTTPConnection("api.booli.se")
     connection.request("GET", url)
     response = connection.getresponse()
-    data = response.read()
+    response_data = response.read()
     connection.close()
     
     if response.status != 200:
         print "fail";
     
-    result = data;
     
-    result_pretty_json = json.loads(result);
+    # Transform this into a json string
+    result_onecall_json = json.loads(response_data);
     
     # get the number of objects (houses) according to the json string
     global total_objects;   # tell python that this variable is global 
-    total_objects = result_pretty_json['totalCount'];
+    total_objects = result_onecall_json['totalCount'];
+    
+    global search_parameters;
+    search_parameters = result_onecall_json['searchParams'];
+    search_parameters['queryText'] = query_text;
+    search_parameters['status'] = status;
+    
+    # Print some debugging output
     print "Total number of housing objects: " + str(total_objects);
     print "Offset: " + str(offset);
     print "Limit: " + str(limit);
     
     
-    # Open the stream to write to a file
-    target = open(filename, 'a')
+    result_all_json = result_onecall_json['sold'];
     
-    target.write(json.dumps(result_pretty_json, indent=4))
-    #target.write(json.dumps(result_pretty_json, indent=4, sort_keys=True))
-    #print result
-
+    print "Array of sold objects: " + str(len(result_all_json));
+    
+        
+    # This will be the list storing all the values of the "sold" property of the json array 
+    #global sold_all;
+    #sold_all = sold_all + result_all_json_sold; 
+       
+    #print "length of sold_all: " + str(len(sold_all));    
+    
+    return result_all_json;
+    
+    
+    
     
     
 # END of function
@@ -81,7 +104,10 @@ def callBooli(status_Sold, search_Query, offset, limit):
 # Call the API until all of the objects (houses) has been retrieved
 while(offset_ini < total_objects):
     
-    callBooli(status_Sold, search_Query, offset_ini, limit_ini);
+    global housingObjects;
+    housingObjects = housingObjects + callBooli(status_Sold, query_text, offset_ini, limit_ini);
+    print "Length of housingObjects: " + str(len(housingObjects));
+
 
     # Preparing for the next call 
     offset_ini = offset_ini + limit_ini;
@@ -89,10 +115,29 @@ while(offset_ini < total_objects):
     print "Offset_ini: " + str(offset_ini);
     print "Limit_ini: " + str(limit_ini);
     
-    
+    # Wait sometime for the next request
     time.sleep(sleeping_time);
+
+
+
+data_all = {'totalCount': total_objects,
+            'searchParameters': search_parameters,
+            'housingObjects': housingObjects}
+
+#Verify that the json string is valid -- if not it will throw an error
+json.loads(data_all);
+
+# Open the stream to write to a file
+target = open(filename, 'w')
     
-    
+target.write(json.dumps(data_all, indent=4))
+#target.write(json.dumps(result_pretty_json, indent=4, sort_keys=True))
+#print result
+
+
+
+
+
 
 # # Setup the stuff
 # callerId = "DataAfterLife"

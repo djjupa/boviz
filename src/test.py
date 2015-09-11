@@ -7,25 +7,28 @@
 #
 #  from hemnet import hemnet
 
-from flask import Blueprint, make_response, jsonify, request
+#from flask import Blueprint, make_response, jsonify, request
 from sys import argv
 import os
+import json
 
 #from parser import hemnet as parser
 #from utils import cache
 
-script, filename_input = argv
+# script, filename_input = argv
+# 
+# current_dir = os.getcwd();
+# 
+# print "Current directory: " + current_dir
+# 
+# filename = current_dir + "/data/booli.json" 
+# #filename = current_dir + "/data/" + filename_input
+# 
+# 
+# print "Opening the file..."
+# target = open(filename, 'w')
+# 
+# print "Writing to file..."
+# target.write("hello")
 
-current_dir = os.getcwd();
-
-print "Current directory: " + current_dir
-
-filename = current_dir + "/data/booli.json" 
-#filename = current_dir + "/data/" + filename_input
-
-
-print "Opening the file..."
-target = open(filename, 'w')
-
-print "Writing to file..."
-target.write("hello")
+jsonStr = "/User/djjupa/Projects/boviz/data/booli_Karlstad.json";
