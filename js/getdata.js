@@ -132,8 +132,40 @@ Chart.defaults.global = {
 	};
 
 
+
 $(document).ready(function(){
 	
+	// Some global variables
+	var monthNames = [	"January", 
+					"February", 
+					"March", 
+					"April", 
+					"May", 
+					"June",
+					"July", 
+					"August", 
+					"September", 
+					"October", 
+					"November", 
+					"December"];
+	
+	// Create a hashmap with months
+	
+	var pricePerMonth = {	"January": 0, 
+							"February": 0, 
+							"March": 0, 
+							"April": 0, 
+							"May": 0, 
+							"June": 0,
+							"July": 0, 
+							"August": 0, 
+							"September": 0, 
+							"October": 0, 
+							"November": 0, 
+							"December": 0 
+						};
+	
+		
 
 	$.getJSON("data/booli_Karlstad.json", function(booli_json){
 		
@@ -165,17 +197,43 @@ function jsonToLineChart(booli_json){
 		var soldObjects = booli_json.housingObjects;
 		var soldDates = [];
 		var soldPrices = [];
+		var pricePerMonth = {};
 		
 		
 		$.each(soldObjects, function(index, soldObject){
 			
-			var soldDate = soldObject[soldDate];
-			var soldPrice = soldObject[soldPrice];
+			var soldDate = soldObject.soldDate;
+			var soldPrice = soldObject.soldPrice;
 			
-			console.log(soldDate);
+			var date = new Date(soldDate);
+			var locale = "sv";
+			var month = date.toLocaleString(locale, {month: "long"});
+			
+			pricePerMonth[month] = soldPrice;  
+			
+			
+
+
+
+			console.log("pricePerMonth");
+			console.log(pricePerMonth[month]);
+			
 			
 			soldDates.push(soldDate);
+			soldPrices.push(soldPrice);
+			
+			
 		});
+	
+	
+		console.log("MONTHS");
+		console.log(pricePerMonth["January"]);
+		console.log(pricePerMonth["February"]);
+		console.log(pricePerMonth["March"]);
+		
+		console.log(pricePerMonth["November"]);
+		console.log(pricePerMonth["December"]);
+	
 	
 		
 		console.log(soldDates);
@@ -183,7 +241,18 @@ function jsonToLineChart(booli_json){
 		
 		
 		var data = {
-		    labels: ["January", "February", "March", "April", "May", "June", "July"],
+		    labels: [	"January", 
+					"February", 
+					"March", 
+					"April", 
+					"May", 
+					"June",
+					"July", 
+					"August", 
+					"September", 
+					"October", 
+					"November", 
+					"December"],
 		    datasets: [
 		        {
 		            label: "My First dataset",
@@ -193,9 +262,9 @@ function jsonToLineChart(booli_json){
 		            pointStrokeColor: "#fff",
 		            pointHighlightFill: "#fff",
 		            pointHighlightStroke: "rgba(220,220,220,1)",
-		            data: [65, 59, 80, 81, 56, 55, 40]
-		        },
-		        {
+		            data: [28, 48, 40, 19, 86, 27, 90]
+		        }
+		        /*,{
 		            label: "My Second dataset",
 		            fillColor: "rgba(151,187,205,0.2)",
 		            strokeColor: "rgba(151,187,205,1)",
@@ -204,7 +273,7 @@ function jsonToLineChart(booli_json){
 		            pointHighlightFill: "#fff",
 		            pointHighlightStroke: "rgba(151,187,205,1)",
 		            data: [28, 48, 40, 19, 86, 27, 90]
-		        }
+		        }*/
 		    ]
 		};	
 		return data;	
