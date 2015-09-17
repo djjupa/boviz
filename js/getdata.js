@@ -169,8 +169,8 @@ function jsonToLineChart(booli_json){
 		
 		$.each(soldObjects, function(index, soldObject){
 			
-			var soldDate = soldObject[soldDate];
-			var soldPrice = soldObject[soldPrice];
+			var soldDate = soldObject.soldDate;
+			var soldPrice = soldObject.soldPrice;
 			
 			console.log(soldDate);
 			
