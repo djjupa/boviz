@@ -21,11 +21,11 @@ print "Data directory: " + data_dir;
 
 
 offset_ini = 0;
-limit_ini = 750;
+limit_ini = 3000;
 sleeping_time = 10;
 status_Sold = "sold";
 status_ForSale = "listings";
-query_text = "Karlstad"
+query_text = "Uppsala";
 
 
 #Get the path and name of the file where the output data will be stored 
@@ -125,7 +125,7 @@ data_all = {'totalCount': total_objects,
             'housingObjects': housingObjects}
 
 #Verify that the json string is valid -- if not it will throw an error
-json.loads(data_all);
+#json.loads(data_all);
 
 # Open the stream to write to a file
 target = open(filename, 'w')
