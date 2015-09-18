@@ -164,6 +164,57 @@ var priceCumulative = {	"January": 0,
 					};
 	
 
+var priceAverage = 	{	"January": {
+									"priceCumulative": 0,
+									"count": 0
+								},  
+						"February": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"March": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"April": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"May": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"June": {
+									"priceCumulative": 0,
+									"count": 0
+								},
+						"July": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"August": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"September": {
+									"priceCumulative": 0,
+									"count": 0
+								},
+						"October": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"November": {
+									"priceCumulative": 0,
+									"count": 0
+								}, 
+						"December": {
+									"priceCumulative": 0,
+									"count": 0
+								}
+					};
+
+
 
 $(document).ready(function(){
 	
