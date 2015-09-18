@@ -133,38 +133,41 @@ Chart.defaults.global = {
 
 
 
+// Some global variables
+var monthNames = [	"January", 
+				"February", 
+				"March", 
+				"April", 
+				"May", 
+				"June",
+				"July", 
+				"August", 
+				"September", 
+				"October", 
+				"November", 
+				"December"];
+
+// Create a hashmap with months
+
+var priceCumulative = {	"January": 0, 
+						"February": 0, 
+						"March": 0, 
+						"April": 0, 
+						"May": 0, 
+						"June": 0,
+						"July": 0, 
+						"August": 0, 
+						"September": 0, 
+						"October": 0, 
+						"November": 0, 
+						"December": 0 
+					};
+	
+
+
 $(document).ready(function(){
 	
-	// Some global variables
-	var monthNames = [	"January", 
-					"February", 
-					"March", 
-					"April", 
-					"May", 
-					"June",
-					"July", 
-					"August", 
-					"September", 
-					"October", 
-					"November", 
-					"December"];
-	
-	// Create a hashmap with months
-	
-	var pricePerMonth = {	"January": 0, 
-							"February": 0, 
-							"March": 0, 
-							"April": 0, 
-							"May": 0, 
-							"June": 0,
-							"July": 0, 
-							"August": 0, 
-							"September": 0, 
-							"October": 0, 
-							"November": 0, 
-							"December": 0 
-						};
-	
+
 		
 
 	$.getJSON("data/booli_Karlstad.json", function(booli_json){
@@ -178,7 +181,6 @@ $(document).ready(function(){
 		
 		// Get the context of the canvas element we want to select
 		var ctx = document.getElementById("chart_bestMonthOfYear").getContext("2d");
-		
 		var myLineChart = new Chart(ctx).Line(linechart_data);
 
 		
@@ -197,7 +199,6 @@ function jsonToLineChart(booli_json){
 		var soldObjects = booli_json.housingObjects;
 		var soldDates = [];
 		var soldPrices = [];
-		var pricePerMonth = {};
 		
 		
 		$.each(soldObjects, function(index, soldObject){
@@ -206,17 +207,14 @@ function jsonToLineChart(booli_json){
 			var soldPrice = soldObject.soldPrice;
 			
 			var date = new Date(soldDate);
-			var locale = "sv";
+			var locale = "eng-us";
 			var month = date.toLocaleString(locale, {month: "long"});
 			
-			pricePerMonth[month] = soldPrice;  
+			priceCumulative[month] = priceCumulative[month] + soldPrice;  
 			
-			
-
-
-
-			console.log("pricePerMonth");
-			console.log(pricePerMonth[month]);
+			//console.log("pricePerMonth");
+			//console.log(month);
+			//console.log(priceCumulative[month]);
 			
 			
 			soldDates.push(soldDate);
@@ -225,35 +223,24 @@ function jsonToLineChart(booli_json){
 			
 		});
 	
-	
 		console.log("MONTHS");
-		console.log(pricePerMonth["January"]);
-		console.log(pricePerMonth["February"]);
-		console.log(pricePerMonth["March"]);
+	
+		var pricePerMonth = {};
 		
-		console.log(pricePerMonth["November"]);
-		console.log(pricePerMonth["December"]);
-	
-	
+		//console.log(soldDates);
 		
-		console.log(soldDates);
-	
+		$.each( priceCumulative, function( month, price ) {
+			pricePerMonth[month] = price / 12;
+			
+			console.log(month);
+			console.log(price);
+			console.log(pricePerMonth[month]); 
+		});	
 		
 		
 		var data = {
-		    labels: [	"January", 
-					"February", 
-					"March", 
-					"April", 
-					"May", 
-					"June",
-					"July", 
-					"August", 
-					"September", 
-					"October", 
-					"November", 
-					"December"],
-		    datasets: [
+		    labels: monthNames
+		    ,datasets: [
 		        {
 		            label: "My First dataset",
 		            fillColor: "rgba(220,220,220,0.2)",
@@ -262,7 +249,7 @@ function jsonToLineChart(booli_json){
 		            pointStrokeColor: "#fff",
 		            pointHighlightFill: "#fff",
 		            pointHighlightStroke: "rgba(220,220,220,1)",
-		            data: [28, 48, 40, 19, 86, 27, 90]
+		            data: pricePerMonth
 		        }
 		        /*,{
 		            label: "My Second dataset",
