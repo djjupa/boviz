@@ -164,7 +164,7 @@ var priceCumulative = {	"January": 0,
 					};
 	
 
-var priceAverage = 	{	"January": {
+var priceAverages = 	{	"January": {
 									"priceCumulative": 0,
 									"count": 0
 								},  
@@ -216,6 +216,7 @@ var priceAverage = 	{	"January": {
 
 
 
+
 $(document).ready(function(){
 	
 
@@ -250,7 +251,7 @@ function jsonToLineChart(booli_json){
 		var soldObjects = booli_json.housingObjects;
 		var soldDates = [];
 		var soldPrices = [];
-		
+		var soldPricesAverages = [];
 		
 		$.each(soldObjects, function(index, soldObject){
 			
@@ -263,6 +264,14 @@ function jsonToLineChart(booli_json){
 			
 			priceCumulative[month] = priceCumulative[month] + soldPrice;  
 			
+			
+			priceAverages[month].priceCumulative = priceAverages[month].priceCumulative + soldPrice;
+			priceAverages[month].count = priceAverages[month].count + 1;
+			
+			console.log(month);
+			console.log(priceAverages[month].priceCumulative);
+			console.log(priceAverages[month].count);
+			
 			//console.log("pricePerMonth");
 			//console.log(month);
 			//console.log(priceCumulative[month]);
@@ -271,22 +280,35 @@ function jsonToLineChart(booli_json){
 			soldDates.push(soldDate);
 			soldPrices.push(soldPrice);
 			
-			
 		});
 	
 		console.log("MONTHS");
 	
-		var pricePerMonth = {};
+		var priceCumulativePerMonth = {};
+		var priceAveragesPerMonth = {};
+		
 		
 		//console.log(soldDates);
 		
 		$.each( priceCumulative, function( month, price ) {
-			pricePerMonth[month] = price / 12;
+			priceCumulativePerMonth[month] = price / 12;
 			
+			console.log("PriceCumulative");
 			console.log(month);
 			console.log(price);
-			console.log(pricePerMonth[month]); 
+			console.log(priceCumulativePerMonth[month]); 
 		});	
+		
+		
+		$.each( priceAverages, function( month, priceAverage ) {
+			priceAveragesPerMonth[month] = priceAverage.priceCumulative / priceAverage.count;
+			
+			console.log("PriceAverages");
+			console.log(month);
+			console.log(priceAverage.priceCumulative);
+			console.log(priceAverage.count); 
+		});	
+		
 		
 		
 		var data = {
@@ -300,9 +322,9 @@ function jsonToLineChart(booli_json){
 		            pointStrokeColor: "#fff",
 		            pointHighlightFill: "#fff",
 		            pointHighlightStroke: "rgba(220,220,220,1)",
-		            data: pricePerMonth
-		        }
-		        /*,{
+		            data: priceAveragesPerMonth
+		        }/*,
+		        {
 		            label: "My Second dataset",
 		            fillColor: "rgba(151,187,205,0.2)",
 		            strokeColor: "rgba(151,187,205,1)",
@@ -310,8 +332,9 @@ function jsonToLineChart(booli_json){
 		            pointStrokeColor: "#fff",
 		            pointHighlightFill: "#fff",
 		            pointHighlightStroke: "rgba(151,187,205,1)",
-		            data: [28, 48, 40, 19, 86, 27, 90]
-		        }*/
+		            data: priceAveragesPerMonth
+		        }
+		        */
 		    ]
 		};	
 		return data;	
