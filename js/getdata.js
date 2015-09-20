@@ -268,9 +268,9 @@ function jsonToLineChart(booli_json){
 			priceAverages[month].priceCumulative = priceAverages[month].priceCumulative + soldPrice;
 			priceAverages[month].count = priceAverages[month].count + 1;
 			
-			console.log(month);
-			console.log(priceAverages[month].priceCumulative);
-			console.log(priceAverages[month].count);
+			//console.log(month);
+			//console.log(priceAverages[month].priceCumulative);
+			//console.log(priceAverages[month].count);
 			
 			//console.log("pricePerMonth");
 			//console.log(month);
